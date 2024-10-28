@@ -1,0 +1,28 @@
+# Environment variables
+.env
+
+# Node dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Compiled output
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm/
+
+# VS Code files
+.vscode/
+
+# MacOS specific files
+.DS_Store
+
+# Git file for ignoring dependencies and configurations
+package-lock.json
