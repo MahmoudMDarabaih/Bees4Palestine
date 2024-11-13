@@ -8,14 +8,14 @@ const createTables = async () => {
             name: 'Users',
             query: `
         CREATE TABLE IF NOT EXISTS Users (
-          id INT PRIMARY KEY AUTO_INCREMENT,
-          full_name VARCHAR(255),
-          invitation_code VARCHAR(255),
-          email VARCHAR(255) UNIQUE,
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
+          full_name VARCHAR(255) NOT NULL,
+          invitation_code INTEGER NOT NULL,
+          email VARCHAR(255) UNIQUE NOT NULL,
           password VARCHAR(255) NOT NULL,
           DOB DATE,
-          stars INT DEFAULT 0,
-          profile_image_url VARCHAR(255),
+          stars INTEGER DEFAULT 0,
+          profile_image_url TEXT,
           country VARCHAR(255),
           role ENUM('admin', 'user') DEFAULT 'user',
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -27,9 +27,11 @@ const createTables = async () => {
             name: 'Platforms',
             query: `
         CREATE TABLE IF NOT EXISTS Platforms (
-          id INT PRIMARY KEY AUTO_INCREMENT,
-          name VARCHAR(255),
-          image_URL VARCHAR(255),
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
+          name_en VARCHAR(255),
+          name_ar VARCHAR(255),
+          is_active BOOLEAN NOT NULL DEFAULT TRUE,
+          image_URL TEXT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
@@ -39,14 +41,16 @@ const createTables = async () => {
             name: 'Missions',
             query: `
         CREATE TABLE IF NOT EXISTS Missions (
-          id INT PRIMARY KEY AUTO_INCREMENT,
-          title VARCHAR(255),
-          type ENUM('Strike', 'Support') NOT NULL,
-          status ENUM('active', 'disabled', 'finished'),
-          body TEXT,
-          platform_id INT,
-          stars INT,
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
+          title JSON,
+          description JSON,
+          platform_id INTEGER,
+          stars INTEGER,
+          image_url TEXT,
           expires_at DATETIME,
+          status ENUM('active', 'disabled', 'finished'),
+          type ENUM('Strike', 'Support') NOT NULL,
+          actions JSON,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
           FOREIGN KEY (platform_id) REFERENCES Platforms(id)
@@ -57,8 +61,8 @@ const createTables = async () => {
             name: 'UserMissionCompletion',
             query: `
         CREATE TABLE IF NOT EXISTS UserMissionCompletion (
-          user_id INT,
-          mission_id INT,
+          user_id INTEGER,
+          mission_id INTEGER,
           status ENUM('Started', 'Completed', 'Canceled') DEFAULT 'Started' NOT NULL,
           completed_at DATETIME,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -73,11 +77,11 @@ const createTables = async () => {
             name: 'ReportedMissions',
             query: `
         CREATE TABLE IF NOT EXISTS ReportedMissions (
-          id INT PRIMARY KEY AUTO_INCREMENT,
-          user_id INT,   
-          mission_URL VARCHAR(255),
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
+          user_id INTEGER,   
+          mission_url VARCHAR(255),
           title VARCHAR(255),
-          platform_id INT,
+          platform_id INTEGER,
           type ENUM('Strike', 'Support') NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -90,10 +94,11 @@ const createTables = async () => {
             name: 'SuggestedComments',
             query: `
         CREATE TABLE IF NOT EXISTS SuggestedComments (
-          id INT PRIMARY KEY AUTO_INCREMENT,
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
           language VARCHAR(2),
           content TEXT,
-          mission_id INT,
+          copy_count INTEGER,
+          mission_id INTEGER,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
           FOREIGN KEY (mission_id) REFERENCES Missions(id)
@@ -104,10 +109,11 @@ const createTables = async () => {
             name: 'Blogs',
             query: `
         CREATE TABLE IF NOT EXISTS Blogs (
-          id INT PRIMARY KEY AUTO_INCREMENT,
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
           content TEXT,
           title VARCHAR(255),
-          image_URL VARCHAR(255),
+          comments JSON,
+          image_url TEXT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
@@ -117,10 +123,10 @@ const createTables = async () => {
             name: 'Comments',
             query: `
         CREATE TABLE IF NOT EXISTS Comments (
-          id INT PRIMARY KEY AUTO_INCREMENT,
-          user_id INT,
-          mission_id INT NULL,
-          blog_id INT NULL,
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
+          user_id INTEGER,
+          blog_id INTEGER NULL,
+          mission_id INTEGER NULL,
           content TEXT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -134,9 +140,9 @@ const createTables = async () => {
             name: 'Actions',
             query: `
         CREATE TABLE IF NOT EXISTS Actions (
-          id INT PRIMARY KEY AUTO_INCREMENT,
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
           name VARCHAR(255),
-          platform_id INT,
+          platform_id INTEGER,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
           FOREIGN KEY (platform_id) REFERENCES Platforms(id)
@@ -148,9 +154,9 @@ const createTables = async () => {
             name: 'InvitationCodes',
             query: `
         CREATE TABLE IF NOT EXISTS InvitationCodes (
-          id INT PRIMARY KEY AUTO_INCREMENT,
-          user_id INT,
-          code VARCHAR(255),
+          id INTEGER PRIMARY KEY AUTO_INCREMENT,
+          user_id INTEGER,
+          code INTEGER,
           used_at DATETIME,
           is_used BOOLEAN DEFAULT false,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
