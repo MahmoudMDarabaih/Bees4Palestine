@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 
 (async () => {
     try {
-        await createTables(); 
+        // await createTables();  // create the tables in the DB.
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
