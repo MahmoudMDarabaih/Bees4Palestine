@@ -1,12 +1,13 @@
-import express, { Application } from 'express';
 import dotenv from 'dotenv';
+dotenv.config(); // Load environment variables
+import express, { Application } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import userRoutes from './routes/userRoutes';
+import dbMiddleware from './middlewares/dbMiddleware';
 // import authMiddleware from './middlewares/authMiddleware';
 
-dotenv.config(); // Load environment variables
 
 const app: Application = express();
 
@@ -14,6 +15,7 @@ const app: Application = express();
 app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse JSON bodies
 app.use(morgan('dev')); // Request logging
+app.use(dbMiddleware); // Apply the dbMiddleware globally
 
 // Health check route
 app.get('/health', (req, res) => {
