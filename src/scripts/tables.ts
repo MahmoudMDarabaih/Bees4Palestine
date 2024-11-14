@@ -1,7 +1,6 @@
-import connection from '../config/database';
-
+import pool from '../config/pool';
 const createTables = async () => {
-    const conn = await connection;
+    const conn = await pool;
 
     const tables = [
         {
@@ -171,7 +170,6 @@ const createTables = async () => {
         console.log(`${table.name} table created`);
     }
 
-    await conn.end();
 };
 
 export default createTables;
