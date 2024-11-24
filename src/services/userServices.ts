@@ -7,9 +7,9 @@ const createNewUserService = async (userDto: UserDto): Promise<QueryResult> => {
     let result: QueryResult;
     [result] = await db.query(
         `INSERT INTO users 
-        (full_name, email, password, invitation_code) 
+        (first_name, last_name, email, password, invitation_code) 
         VALUES (?, ?, ?, ?)`,
-        [userDto.fullName, userDto.email, userDto.password, userDto.invitationCode]);
+        [userDto.firstName, userDto.lastName, userDto.email, userDto.password, userDto.invitationCode]);
     return result;
 }
 const checkIfEmailExists = async (email: string): Promise<boolean> => {

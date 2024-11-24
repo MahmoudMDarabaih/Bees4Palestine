@@ -8,8 +8,8 @@ import bcrypt from 'bcryptjs';
 
 export const registerUser = errorHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-        const { fullName, email, password, invitationCode } = req.body;
-        const newUser = new UserDto(fullName, email, password, invitationCode)
+        const { firstName, lastName, email, password, invitationCode } = req.body;
+        const newUser = new UserDto(firstName, lastName, email, password, invitationCode)
         if (await checkIfEmailExists(newUser.email)) {
             return next(new APIError('Email already in use', 400));
         }

@@ -8,7 +8,8 @@ const createTables = async () => {
             query: `
         CREATE TABLE IF NOT EXISTS Users (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
-          full_name VARCHAR(255) NOT NULL,
+          first_name VARCHAR(255) NOT NULL,
+          last_name VARCHAR(255) NOT NULL,
           invitation_code INTEGER NOT NULL,
           email VARCHAR(255) UNIQUE NOT NULL,
           password VARCHAR(255) NOT NULL,
