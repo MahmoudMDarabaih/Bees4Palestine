@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config(); // Load environment variables
-import express, { Application } from 'express';
+import express, { Application,Request,Response,NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import userRoutes from './routes/userRoutes';
 import dbMiddleware from './middlewares/dbMiddleware';
+import errorController from './controllers/errorController';
 // import authMiddleware from './middlewares/authMiddleware';
 
 
@@ -34,9 +35,9 @@ app.use('/api/v1/users', userRoutes);
 // });
 
 // Error Handling Middleware (must come after routes)
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error(err.stack); // Log the error
-    res.status(500).json({ message: 'Something went wrong' });
+// pass errors to the global error controller
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  errorController(err, req, res, next);
 });
 
 export default app;
