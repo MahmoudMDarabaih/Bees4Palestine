@@ -1,11 +1,12 @@
 export class UserDto {
-    id: number;
-    name: string;
+    fullName: string;
     email: string;
-
-    constructor(id: number, name: string, email: string) {
-        this.id = id;
-        this.name = name;
+    password: string;
+    invitationCode: number;
+    constructor(fullName: string, email: string, password: string,invitationCode:number) {
+        this.fullName = fullName;
         this.email = email;
-    }
+        this.password = password;
+        this.invitationCode = invitationCode;
+    }    
 }
