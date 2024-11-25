@@ -16,7 +16,7 @@ const app: Application = express();
 app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse JSON bodies
 app.use(morgan('dev')); // Request logging
-app.use(dbMiddleware); // Apply the dbMiddleware globally
+// app.use(dbMiddleware); // Apply the dbMiddleware globally
 
 // Health check route
 app.get('/health', (req, res) => {
