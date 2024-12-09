@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
-
+import removeExpiredCodes from './scripts/cronJobs';
+removeExpiredCodes();
 import createTables from './scripts/tables';
 import app from './app';
 

@@ -3,8 +3,8 @@ export class UserDto {
     lastName: string;
     email: string;
     password: string;
-    invitationCode: number;
-    constructor(firstName: string, lastName: string, email: string, password: string, invitationCode: number) {
+    invitationCode: string;
+    constructor(firstName: string, lastName: string, email: string, password: string, invitationCode: string) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

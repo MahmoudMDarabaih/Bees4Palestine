@@ -1,16 +1,16 @@
 import pool from '../config/pool';
 const createTables = async () => {
-    const conn = await pool;
+  const conn = await pool;
 
-    const tables = [
-        {
-            name: 'Users',
-            query: `
+  const tables = [
+    {
+      name: 'Users',
+      query: `
         CREATE TABLE IF NOT EXISTS Users (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           first_name VARCHAR(255) NOT NULL,
           last_name VARCHAR(255) NOT NULL,
-          invitation_code INTEGER NOT NULL,
+          invitation_code VARCHAR(36) UNIQUE NOT NULL,
           email VARCHAR(255) UNIQUE NOT NULL,
           password VARCHAR(255) NOT NULL,
           DOB DATE,
@@ -22,10 +22,10 @@ const createTables = async () => {
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
       `,
-        },
-        {
-            name: 'Platforms',
-            query: `
+    },
+    {
+      name: 'Platforms',
+      query: `
         CREATE TABLE IF NOT EXISTS Platforms (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           name_en VARCHAR(255),
@@ -36,10 +36,10 @@ const createTables = async () => {
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
       `,
-        },
-        {
-            name: 'Missions',
-            query: `
+    },
+    {
+      name: 'Missions',
+      query: `
         CREATE TABLE IF NOT EXISTS Missions (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           title JSON,
@@ -56,10 +56,10 @@ const createTables = async () => {
           FOREIGN KEY (platform_id) REFERENCES Platforms(id)
         );
       `,
-        },
-        {
-            name: 'UserMissionCompletion',
-            query: `
+    },
+    {
+      name: 'UserMissionCompletion',
+      query: `
         CREATE TABLE IF NOT EXISTS UserMissionCompletion (
           user_id INTEGER,
           mission_id INTEGER,
@@ -72,10 +72,10 @@ const createTables = async () => {
           FOREIGN KEY (mission_id) REFERENCES Missions(id)
         );
       `,
-        },
-        {
-            name: 'ReportedMissions',
-            query: `
+    },
+    {
+      name: 'ReportedMissions',
+      query: `
         CREATE TABLE IF NOT EXISTS ReportedMissions (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           user_id INTEGER,   
@@ -89,10 +89,10 @@ const createTables = async () => {
           FOREIGN KEY (platform_id) REFERENCES Platforms(id)
         );
       `,
-        },
-        {
-            name: 'SuggestedComments',
-            query: `
+    },
+    {
+      name: 'SuggestedComments',
+      query: `
         CREATE TABLE IF NOT EXISTS SuggestedComments (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           language VARCHAR(2),
@@ -104,10 +104,10 @@ const createTables = async () => {
           FOREIGN KEY (mission_id) REFERENCES Missions(id)
         );
       `,
-        },
-        {
-            name: 'Blogs',
-            query: `
+    },
+    {
+      name: 'Blogs',
+      query: `
         CREATE TABLE IF NOT EXISTS Blogs (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           content TEXT,
@@ -118,10 +118,10 @@ const createTables = async () => {
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
       `,
-        },
-        {
-            name: 'Comments',
-            query: `
+    },
+    {
+      name: 'Comments',
+      query: `
         CREATE TABLE IF NOT EXISTS Comments (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           user_id INTEGER,
@@ -135,10 +135,10 @@ const createTables = async () => {
           FOREIGN KEY (blog_id) REFERENCES Blogs(id)
         );
       `,
-        },
-        {
-            name: 'Actions',
-            query: `
+    },
+    {
+      name: 'Actions',
+      query: `
         CREATE TABLE IF NOT EXISTS Actions (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           name VARCHAR(255),
@@ -149,27 +149,28 @@ const createTables = async () => {
 
         );
       `,
-        },
-        {
-            name: 'InvitationCodes',
-            query: `
+    },
+    {
+      name: 'InvitationCodes',
+      query: `
         CREATE TABLE IF NOT EXISTS InvitationCodes (
-          id INTEGER PRIMARY KEY AUTO_INCREMENT,
-          user_id INTEGER,
-          code INTEGER,
-          used_at DATETIME,
-          is_used BOOLEAN DEFAULT false,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (user_id) REFERENCES Users(id)
+           id INTEGER PRIMARY KEY AUTO_INCREMENT,
+           created_by INTEGER,
+           used_by INTEGER DEFAULT 0,
+           code VARCHAR(36) UNIQUE,
+           used_at DATETIME,
+           is_used TINYINT(1) DEFAULT 0,
+           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+           CONSTRAINT fk_user FOREIGN KEY (created_by) REFERENCES Users(id)
         );
       `,
-        },
-    ];
+    },
+  ];
 
-    for (const table of tables) {
-        await conn.execute(table.query);
-        console.log(`${table.name} table created`);
-    }
+  for (const table of tables) {
+    await conn.execute(table.query);
+    console.log(`${table.name} table created`);
+  }
 
 };
 

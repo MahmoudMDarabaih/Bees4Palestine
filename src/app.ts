@@ -23,16 +23,8 @@ app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK' });
 });
 
-// Public directory for static files (optional)
-app.use(express.static('public'));
-
 // Routes
-app.use('/api/v1/users', userRoutes);
-
-// Protect certain routes with authentication
-// app.use('/api/protected', authMiddleware, (req, res) => {
-//     res.send('Protected route');
-// });
+app.use('/api/users', userRoutes);
 
 // Error Handling Middleware (must come after routes)
 // pass errors to the global error controller
