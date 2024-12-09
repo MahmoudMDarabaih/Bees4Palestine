@@ -76,6 +76,9 @@ const canGenerateCodes = async (userId: String): Promise<boolean> => {
 
 
 const checkIfInvitationCodeValid = async (code: string): Promise<boolean> => {
+    if (code === process.env.SUPER_INVITATION) {
+        return true;
+    }
     const [result]: any = await db.query(
         `select * from InvitationCodes
         WHERE code = ? AND is_used = false
