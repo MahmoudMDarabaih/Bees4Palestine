@@ -10,7 +10,7 @@ const createTables = async () => {
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           first_name VARCHAR(255) NOT NULL,
           last_name VARCHAR(255) NOT NULL,
-          invitation_code VARCHAR(36) UNIQUE NOT NULL,
+          invitation_code VARCHAR(36) NOT NULL,
           email VARCHAR(255) UNIQUE NOT NULL,
           password VARCHAR(255) NOT NULL,
           DOB DATE,
@@ -160,8 +160,7 @@ const createTables = async () => {
            code VARCHAR(36) UNIQUE,
            used_at DATETIME,
            is_used TINYINT(1) DEFAULT 0,
-           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-           CONSTRAINT fk_user FOREIGN KEY (created_by) REFERENCES Users(id)
+           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
       `,
     },
