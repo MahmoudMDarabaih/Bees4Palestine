@@ -50,7 +50,7 @@ const checkUserExistence = async (options: { email?: string, id?: number },
             stars,
             profile_image_url as profileImageUrl,
             country,
-            role,
+            role
         FROM users 
         WHERE ${email ? 'email = ?' : 'id = ?'}
         LIMIT 1`,
@@ -62,7 +62,6 @@ const checkUserExistence = async (options: { email?: string, id?: number },
     }
 
     const user = rows[0];
-
     return new GetUserDto(
         user.id,
         user.first_name,
@@ -77,6 +76,8 @@ const checkUserExistence = async (options: { email?: string, id?: number },
         user.role,
     );
 }
+
+
 /**
  * Generates an invitation code using UUID.
  * @returns A unique invitation code, or API Error if the user have already generated 4 codes within 24 hours .
