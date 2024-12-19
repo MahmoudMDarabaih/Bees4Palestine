@@ -4,6 +4,7 @@ import { createNewUserService, checkUserExistence, checkIfInvitationCodeValid } 
 import errorHandler from '../utils/errorHandler'
 import APIError from '../utils/APIError';
 import bcrypt from 'bcryptjs';
+import { generateToken } from '../services/JWT_Services';
 
 
 export const registerUser = errorHandler(
@@ -11,10 +12,10 @@ export const registerUser = errorHandler(
         const { firstName, lastName, email, password, invitationCode } = req.body;
         const newUser = new CreateUserDto(firstName, lastName, email, password, invitationCode)
         if (!await checkIfInvitationCodeValid(newUser.invitationCode)) {
-            return next(new APIError('Code is either invalid or already used!!', 400));
+            return next(new APIError('Code is either invalid or already used!!', 401));
         }
         if (await checkUserExistence({ email: newUser.email })) {
-            return next(new APIError('Email already in use', 400));
+            return next(new APIError('Email already in use', 401));
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         newUser.password = hashedPassword;
@@ -31,18 +32,20 @@ export const userLogin = errorHandler(
         const user: GetUserDto | null = await checkUserExistence({ email: email })
         if (user) {
             if (!await bcrypt.compare(password, user.password)) {
-                res.status(400).json({
-                    message: 'the provided password is not correct',
-                });
+                return next(new APIError('the provided password is not correct', 401));
             }
+            const token = generateToken(user);
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                expires: new Date(Date.now() + 1 * 60 * 60 * 1000), // 1 hour
+            });
             res.status(200).json({
                 message: 'User logged in successfully',
+                token: token,
                 user: user
             });
         }
         else {
-            res.status(400).json({
-                message: 'the provided email is not registered for a user',
-            });
+            return next(new APIError('the provided email is not registered for a user', 401));
         }
     });
