@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerUser } from '../controllers/userController';
+import { registerUser, userLogin } from '../controllers/userController';
 import validateRequest from '../middlewares/validateRequest';
 import { loginSchema, registerNewUserSchema } from '../validators/userValidator';
 
@@ -10,6 +10,6 @@ router.post('/signup',
     registerUser);
 router.post('/login',
     validateRequest({ bodySchema: loginSchema }),
-    registerUser);
+    userLogin);
 
 export default router;
