@@ -1,6 +1,6 @@
 import { QueryResult } from 'mysql2/promise';
 import db from '../config/pool';
-import { UserDto } from '../dtos/UserDTO';
+import { GetUserDto, CreateUserDto } from '../dtos/UserDTO';
 import { v4 as uuidv4 } from 'uuid';
 import { promises } from 'dns';
 import APIError from '../utils/APIError';
@@ -8,7 +8,7 @@ import { console } from 'inspector';
 
 
 
-const createNewUserService = async (userDto: UserDto): Promise<QueryResult> => {
+const createNewUserService = async (userDto: CreateUserDto): Promise<QueryResult> => {
     // Insert the user into the database and retrieve the result
     const [result]: any = await db.query(
         `INSERT INTO users 
@@ -35,11 +35,47 @@ const createNewUserService = async (userDto: UserDto): Promise<QueryResult> => {
     return result;
 };
 
-const checkIfEmailExists = async (email: string): Promise<boolean> => {
-    const [rows]: any = await db.query(
-        `SELECT 1 FROM users 
-        WHERE email = ?`, [email]);
-    return rows.length > 0 ? true : false;
+const checkUserExistence = async (options: { email?: string, id?: number },
+): Promise<GetUserDto | null> => {
+    const { email, id } = options;
+    let [rows]: any = await db.query(
+        `SELECT 
+            id,
+            first_name,
+            last_name,
+            email,
+            password,
+            invitation_code,
+            DOB as dob,
+            stars,
+            profile_image_url as profileImageUrl,
+            country,
+            role,
+        FROM users 
+        WHERE ${email ? 'email = ?' : 'id = ?'}
+        LIMIT 1`,
+        [email || id]
+    );
+
+    if (!rows || rows.length === 0) {
+        return null;
+    }
+
+    const user = rows[0];
+
+    return new GetUserDto(
+        user.id,
+        user.first_name,
+        user.last_name,
+        user.email,
+        user.password,
+        user.invitation_code,
+        user.dob,
+        user.stars,
+        user.profileImageUrl,
+        user.country,
+        user.role,
+    );
 }
 /**
  * Generates an invitation code using UUID.
@@ -77,7 +113,7 @@ const canGenerateCodes = async (userId: String): Promise<boolean> => {
 
 const checkIfInvitationCodeValid = async (code: string): Promise<boolean> => {
     // how can we enhance this?
-    if (code === process.env.SUPER_INVITATION) { 
+    if (code === process.env.SUPER_INVITATION) {
         return true;
     }
     const [result]: any = await db.query(
@@ -88,4 +124,4 @@ const checkIfInvitationCodeValid = async (code: string): Promise<boolean> => {
     return result[0] ? true : false;
 }
 
-export { createNewUserService, checkIfEmailExists, generateInvitationCode, checkIfInvitationCodeValid };
+export { createNewUserService, checkUserExistence, generateInvitationCode, checkIfInvitationCodeValid };
