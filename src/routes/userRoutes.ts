@@ -1,15 +1,19 @@
 import { Router } from 'express';
-import { registerUser, userLogin } from '../controllers/userController';
+import { registerNewUserController, LoginController, logoutController } from '../controllers/userController';
 import validateRequest from '../middlewares/validateRequest';
 import { loginSchema, registerNewUserSchema } from '../validators/userValidator';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const router = Router();
 
 router.post('/signup',
     validateRequest({ bodySchema: registerNewUserSchema }),
-    registerUser);
+    registerNewUserController);
 router.post('/login',
     validateRequest({ bodySchema: loginSchema }),
-    userLogin);
+    LoginController);
+router.get('/logout',
+    authMiddleware,
+    logoutController);
 
 export default router;

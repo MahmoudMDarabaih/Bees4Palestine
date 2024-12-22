@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 import { generateToken } from '../services/JWT_Services';
 
 
-export const registerUser = errorHandler(
+export const registerNewUserController = errorHandler(
     async (req: Request, res: Response, next: NextFunction) => {
         const { firstName, lastName, email, password, invitationCode } = req.body;
         const newUser = new CreateUserDto(firstName, lastName, email, password, invitationCode)
@@ -26,7 +26,7 @@ export const registerUser = errorHandler(
         });
     });
 
-export const userLogin = errorHandler(
+export const LoginController = errorHandler(
     async (req: Request, res: Response, next: NextFunction) => {
         const { email, password } = req.body;
         const user: GetUserDto | null = await checkUserExistence({ email: email })
@@ -49,3 +49,9 @@ export const userLogin = errorHandler(
             return next(new APIError('the provided email is not registered for a user', 401));
         }
     });
+export const logoutController = errorHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        res.clearCookie('jwt', { httpOnly: true });
+        res.status(200).json({ message: 'Successfully logged out'/*, user: req.user */ });
+    },
+);
