@@ -11,8 +11,12 @@ const authMiddleware = errorHandler(
     async (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers.authorization;
         let token;
-        if (authHeader && authHeader.startsWith('Bearer ')) {
-            [, token] = authHeader.split(' ');
+        if (authHeader) {
+            if (authHeader.startsWith('Bearer ')) {
+                [, token] = authHeader.split(' ');
+            } else {
+                return next(new APIError("the token is not structured correctly!", 401));
+            }
         }
 
         // If not found in the header, try to get it from cookies

@@ -4,7 +4,7 @@ import express, { Application,Request,Response,NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
-import userRoutes from './routes/userRoutes';
+import userRoutes from './routes/authRoutes';
 import dbMiddleware from './middlewares/dbMiddleware';
 import errorController from './controllers/errorController';
 // import authMiddleware from './middlewares/authMiddleware';
