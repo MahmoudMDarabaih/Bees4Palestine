@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { CreateUserDto, GetUserDto } from '../dtos/UserDTO';
 import { createNewUserService, checkUserExistence, checkIfInvitationCodeValid } from '../services/userServices';
-import errorHandler from '../utils/errorHandler'
-import APIError from '../utils/APIError';
+import errorHandler from '../utils/functions/errorHandler'
+import APIError from '../utils/types/APIError';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../services/JWT_Services';
 

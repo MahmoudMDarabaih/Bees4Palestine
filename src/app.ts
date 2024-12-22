@@ -4,7 +4,8 @@ import express, { Application,Request,Response,NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
-import userRoutes from './routes/authRoutes';
+import authRouter from './routes/authRoutes';
+import missionsRouter from './routes/missionsRoutes';
 import dbMiddleware from './middlewares/dbMiddleware';
 import errorController from './controllers/errorController';
 // import authMiddleware from './middlewares/authMiddleware';
@@ -24,7 +25,8 @@ app.get('/health', (req, res) => {
 });
 
 // Routes
-app.use('/api/users', userRoutes);
+app.use('/api/users', authRouter);
+app.use('/api/missions', missionsRouter);
 
 // Error Handling Middleware (must come after routes)
 // pass errors to the global error controller

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
-import APIError from '../utils/APIError';
+import APIError from '../utils/types/APIError';
 
 const validateRequest = (options: {
   bodySchema?: Joi.ObjectSchema,

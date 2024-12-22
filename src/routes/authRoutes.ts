@@ -4,16 +4,16 @@ import validateRequest from '../middlewares/validateRequest';
 import { loginSchema, registerNewUserSchema } from '../validators/userValidator';
 import authMiddleware from '../middlewares/authMiddleware';
 
-const router = Router();
+const authRouter = Router();
 
-router.post('/signup',
+authRouter.post('/signup',
     validateRequest({ bodySchema: registerNewUserSchema }),
     registerNewUserController);
-router.post('/login',
+authRouter.post('/login',
     validateRequest({ bodySchema: loginSchema }),
     LoginController);
-router.get('/logout',
+authRouter.get('/logout',
     authMiddleware,
     logoutController);
 
-export default router;
+export default authRouter;

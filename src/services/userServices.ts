@@ -3,7 +3,7 @@ import db from '../config/pool';
 import { GetUserDto, CreateUserDto } from '../dtos/UserDTO';
 import { v4 as uuidv4 } from 'uuid';
 import { promises } from 'dns';
-import APIError from '../utils/APIError';
+import APIError from '../utils/types/APIError';
 import { console } from 'inspector';
 
 

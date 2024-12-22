@@ -1,6 +1,6 @@
 import { GetUserDto } from '../dtos/UserDTO';
-import APIError from '../utils/APIError';
-import errorHandler from '../utils/errorHandler';
+import APIError from '../utils/types/APIError';
+import errorHandler from '../utils/functions/errorHandler';
 import { NextFunction, Request, Response } from 'express';
 
 const adminMiddleware = errorHandler(

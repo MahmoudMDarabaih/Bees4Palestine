@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ForeignKeyConstraintError } from 'sequelize';
 
-import APIError from "../utils/APIError";
+import APIError from "../utils/types/APIError";
 
 const errorController = (err: Error, req: Request, res: Response, next: NextFunction): void => {
 if(err instanceof APIError){

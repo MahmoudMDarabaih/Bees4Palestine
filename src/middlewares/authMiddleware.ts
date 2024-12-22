@@ -1,7 +1,7 @@
 import { decodeToken } from '../services/JWT_Services';
 import { GetUserDto } from '../dtos/UserDTO';
-import APIError from '../utils/APIError';
-import errorHandler from '../utils/errorHandler';
+import APIError from '../utils/types/APIError';
+import errorHandler from '../utils/functions/errorHandler';
 import { Identifier } from 'sequelize';
 import { checkUserExistence } from '../services/userServices';
 import { NextFunction, Request, Response } from 'express';
