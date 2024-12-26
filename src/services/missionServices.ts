@@ -9,9 +9,9 @@ const createNewMissionService = async (mission: CreateMissionDto): Promise<Query
 
     const [result]: any = await db.query(
         `INSERT INTO missions 
-                (title, description, platform_id, stars, expires_at, status, type, actions) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [title, description, mission.platformID, mission.stars, mission.expirationDate, mission.status, mission.type, actions]
+                (title, description, platform_id, stars, expires_at, status, type, actions,mission_Link) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [title, description, mission.platformID, mission.stars, mission.expirationDate, mission.status, mission.type, actions, mission.mission_Link]
     );
     return result.insertId;
 }
@@ -21,7 +21,8 @@ const getMissionService = async (missionID: number) => {
     const [rows]: any = await db.query(
         `SELECT *
          FROM missions 
-         WHERE id = ?`,
+         WHERE id = ?
+         LIMIT 1`,
         [missionID]
     );
 
@@ -29,14 +30,45 @@ const getMissionService = async (missionID: number) => {
         return null;
     }
     return rows[0];
-    // Parse JSON fields back into objects if necessary
-    // const mission = {
-    //     ...missionDetails[0],
-    //     title: JSON.parse(missionDetails[0].title),
-    //     description: JSON.parse(missionDetails[0].description),
-    //     actions: JSON.parse(missionDetails[0].actions),
-    // };
-
-
 }
-export { createNewMissionService, getMissionService };
+
+const getAllMissionsService = async () => {
+    const [rows]: any = await db.query(
+        `SELECT *
+         FROM missions 
+         `
+    );
+
+    if (rows.length === 0 || !rows) {
+        return null;
+    }
+    return rows;
+}
+
+const getAllMissionsBy_Service = async (options: { platformID?: string, type?: string }) => {
+    const { platformID, type } = options;
+
+    // Build dynamic SQL query and parameters
+    let query = `SELECT * FROM missions `;
+    const queryParams: any[] = [];
+
+    if (platformID) {
+        query += `WHERE platform_id = ? `;
+        queryParams.push(platformID);
+    }
+
+    if (type) {
+        query += `WHERE type = ? `;
+        queryParams.push(type);
+    }
+
+    const [rows]: any = await db.query(query.trim(), queryParams);
+
+    if (!rows || rows.length === 0) {
+        return null;
+    }
+
+    return rows;
+};
+
+export { createNewMissionService, getMissionService, getAllMissionsService, getAllMissionsBy_Service };

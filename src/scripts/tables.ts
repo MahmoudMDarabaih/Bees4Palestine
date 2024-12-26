@@ -43,6 +43,7 @@ const createTables = async () => {
         CREATE TABLE IF NOT EXISTS Missions (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
           title JSON,
+          mission_Link TEXT,
           description JSON,
           platform_id INTEGER,
           stars INTEGER,

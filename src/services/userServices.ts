@@ -35,7 +35,7 @@ const createNewUserService = async (userDto: CreateUserDto): Promise<QueryResult
     return result;
 };
 
-const checkUserExistence = async (options: { email?: string, id?: number },
+const checkUserExistence = async (options: { email?: string, id?: number }
 ): Promise<GetUserDto | null> => {
     const { email, id } = options;
     let [rows]: any = await db.query(

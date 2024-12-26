@@ -9,6 +9,7 @@ export class CreateMissionDto {
     status: string;
     type: string;
     actions: Json;
+    mission_Link: Json;
     constructor(
         title: Json,
         description: Json,
@@ -17,7 +18,8 @@ export class CreateMissionDto {
         expirationDate: Date,
         status: string,
         type: string,
-        actions: Json
+        actions: Json,
+        mission_Link: Json
     ) {
         this.title = title;
         this.description = description;
@@ -27,5 +29,6 @@ export class CreateMissionDto {
         this.status = status;
         this.type = type;
         this.actions = actions;
+        this.mission_Link = mission_Link;
     }
 }

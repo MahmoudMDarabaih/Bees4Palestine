@@ -98,4 +98,14 @@ export const createMissionSchema: ObjectSchema = Joi.object({
             'string.base': 'Type must be a string.',
         }),
     actions: Joi.object(),
+    mission_Link: Joi.string(),
+});
+
+export const getMissionSchema: ObjectSchema = Joi.object({
+    id: Joi.string()
+        .required()
+        .messages({
+            'any.required': 'order ID is required',
+            'string.base': 'order ID must be a string',
+        }),
 });
