@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { registerNewUserController, LoginController, logoutController } from '../controllers/authController';
 import validateRequest from '../middlewares/validateRequest';
-import { createMissionSchema, getMissionSchema } from '../validators/missionValidators';
+import { createMissionSchema } from '../validators/missionValidators';
 import adminMiddleware from '../middlewares/adminMiddleware';
-import { createMission, getAllMissions, getMission, getMissionsByPlatform, getMissionsByType } from '../controllers/missionsController';
+import { createMission, getAllMissions, getMission, getMissionsByPlatform, getMissionsByType, deleteMissions } from '../controllers/missionsController';
 import authMiddleware from '../middlewares/authMiddleware';
 
 const missionsRouter = Router();
@@ -29,6 +28,11 @@ missionsRouter.get('/platform/:id',
 missionsRouter.get('/type/:id',
     authMiddleware,
     getMissionsByType
+);
+missionsRouter.delete('/:id',
+    authMiddleware,
+    adminMiddleware,
+    deleteMissions
 );
 
 

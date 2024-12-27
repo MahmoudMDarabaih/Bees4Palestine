@@ -17,7 +17,7 @@ const createNewMissionService = async (mission: CreateMissionDto): Promise<Query
 }
 
 
-const getMissionService = async (missionID: number) => {
+const getMissionService = async (missionID: string) => {
     const [rows]: any = await db.query(
         `SELECT *
          FROM missions 
@@ -30,6 +30,19 @@ const getMissionService = async (missionID: number) => {
         return null;
     }
     return rows[0];
+}
+
+const deleteMissionService = async (missionID: string) => {
+    const [result]: any = await db.query(
+        `Delete FROM missions 
+         WHERE id = ?`,
+        [missionID]
+    );
+    if (result?.affectedRows === 1) {
+        return true;
+    }
+
+    return null;
 }
 
 const getAllMissionsService = async () => {
@@ -49,7 +62,7 @@ const getAllMissionsBy_Service = async (options: { platformID?: string, type?: s
     const { platformID, type } = options;
 
     // Build dynamic SQL query and parameters
-    let query = `SELECT * FROM missions `;
+    let query = `SELECT * FROM missions`;
     const queryParams: any[] = [];
 
     if (platformID) {
@@ -71,4 +84,4 @@ const getAllMissionsBy_Service = async (options: { platformID?: string, type?: s
     return rows;
 };
 
-export { createNewMissionService, getMissionService, getAllMissionsService, getAllMissionsBy_Service };
+export { createNewMissionService, getMissionService, getAllMissionsService, getAllMissionsBy_Service, deleteMissionService };

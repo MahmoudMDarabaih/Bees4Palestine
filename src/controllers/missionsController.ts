@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from "express-serve-static-core";
 import errorHandler from "../utils/functions/errorHandler";
 import { CreateMissionDto } from "../dtos/MissionDTO";
-import { createNewMissionService, getAllMissionsBy_Service, getAllMissionsService, getMissionService } from "../services/missionServices"
+import { createNewMissionService, getAllMissionsBy_Service, getAllMissionsService, getMissionService, deleteMissionService } from "../services/missionServices"
 import APIError from "../utils/types/APIError";
 
 
@@ -28,7 +28,7 @@ export const createMission = errorHandler(
 export const getMission = errorHandler(
     async (req: Request, res: Response, next: NextFunction) => {
         const missionID = req.params.id;
-        const mission = await getMissionService(missionID as any);
+        const mission = await getMissionService(missionID);
         if (mission) {
             res.status(200).json(
                 {
@@ -93,6 +93,22 @@ export const getMissionsByType = errorHandler(
         }
         else {
             next(new APIError("no results!!", 401))
+        }
+    }
+)
+export const deleteMissions = errorHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const id = req.params.id;
+        const result = await deleteMissionService(id);
+        if (result) {
+            res.status(200).json(
+                {
+                    statues: "The mission was deleted successfully!",
+                }
+            );
+        }
+        else {
+            next(new APIError("an error happened while deleting the mission or mission doesn't exist!!", 401))
         }
     }
 )
