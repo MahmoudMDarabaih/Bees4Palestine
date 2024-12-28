@@ -84,4 +84,38 @@ const getAllMissionsBy_Service = async (options: { platformID?: string, type?: s
     return rows;
 };
 
-export { createNewMissionService, getMissionService, getAllMissionsService, getAllMissionsBy_Service, deleteMissionService };
+const updateMission = async (id: string, fieldsToUpdate: object) => {
+
+    const setClause = Object.keys(fieldsToUpdate)
+        .map((field) => `${field} = ?`)
+        .join(", ");
+
+    const values = Object.values(fieldsToUpdate);
+
+    const query = `
+        UPDATE missions
+        SET ${setClause}
+        WHERE id = ?;
+    `;
+
+    // Execute the SQL query
+    const [result]: any = await db.query(query, [...values, id]);
+
+    if (result.affectedRows === 0) {
+        return null;
+    }
+
+    // Return the updated mission details
+    const [updatedMission]: any = await db.query(`SELECT * FROM missions WHERE id = ?`, [id]);
+    return updatedMission[0];
+
+}
+
+export {
+    createNewMissionService,
+    getMissionService,
+    getAllMissionsService,
+    getAllMissionsBy_Service,
+    deleteMissionService,
+    updateMission
+};

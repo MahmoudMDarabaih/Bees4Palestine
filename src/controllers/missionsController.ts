@@ -1,7 +1,13 @@
 import { NextFunction, Response, Request } from "express-serve-static-core";
 import errorHandler from "../utils/functions/errorHandler";
 import { CreateMissionDto } from "../dtos/MissionDTO";
-import { createNewMissionService, getAllMissionsBy_Service, getAllMissionsService, getMissionService, deleteMissionService } from "../services/missionServices"
+import { 
+    createNewMissionService, 
+    getAllMissionsBy_Service, 
+    getAllMissionsService, 
+    getMissionService, 
+    deleteMissionService, 
+    updateMission } from "../services/missionServices"
 import APIError from "../utils/types/APIError";
 
 
@@ -109,6 +115,27 @@ export const deleteMissions = errorHandler(
         }
         else {
             next(new APIError("an error happened while deleting the mission or mission doesn't exist!!", 401))
+        }
+    }
+
+
+)
+export const updateMissionByID = errorHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const id = req.params.id;
+        const { ...fieldsToUpdate } = req.body;
+
+        const result = await updateMission(id, fieldsToUpdate);
+        if (result) {
+            res.status(200).json(
+                {
+                    updatedMission: result,
+                    statues: "The mission was deleted successfully!",
+                }
+            );
+        }
+        else {
+            next(new APIError("Mission not found or no changes were made.", 404))
         }
     }
 )

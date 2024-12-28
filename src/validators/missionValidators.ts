@@ -97,15 +97,101 @@ export const createMissionSchema: ObjectSchema = Joi.object({
             'any.required': 'Type is required.',
             'string.base': 'Type must be a string.',
         }),
-    actions: Joi.object(),
-    mission_Link: Joi.string(),
-});
-
-export const getMissionSchema: ObjectSchema = Joi.object({
-    id: Joi.string()
+    mission_Link: Joi.string()
+        .uri()
         .required()
         .messages({
-            'any.required': 'order ID is required',
-            'string.base': 'order ID must be a string',
+            'any.required': 'Mission Link is required.',
+            "string.base": "The 'mission Link' field must be a valid URI string.",
         }),
+    actions: Joi.object()
+        .required()
+        .messages({
+            'any.required': 'Actions list is required.',
+            "object.base": "The 'actions' field must be a valid JSON object.",
+        }),
+});
+
+export const updateMissionSchema = Joi.object({
+    title: Joi.object({
+        en: Joi.string().optional().messages({
+            "string.base": "Title in English must be a string.",
+        }),
+        ar: Joi.string().optional().messages({
+            "string.base": "Title in Arabic must be a string.",
+        })
+    }).optional().messages({
+        "object.base": "Title must be an object with 'en' and 'ar' properties."
+    }),
+
+    description: Joi.object({
+        en: Joi.string().optional().messages({
+            "string.base": "Description in English must be a string.",
+        }),
+        ar: Joi.string().optional().messages({
+            "string.base": "Description in Arabic must be a string.",
+        })
+    }).optional().messages({
+        "object.base": "Description must be an object with 'en' and 'ar' properties."
+    }),
+
+    platformID: Joi.number()
+        .integer()
+        .optional()
+        .messages({
+            "number.base": "Platform ID must be a valid number.",
+            "number.integer": "Platform ID must be an integer."
+        }),
+
+    stars: Joi.number()
+        .integer()
+        .min(0)
+        .optional()
+        .messages({
+            "number.base": "Stars must be a valid number.",
+            "number.min": "Stars must be greater than or equal to 0.",
+            "number.integer": "Stars must be an integer."
+        }),
+
+    expirationDate: Joi.date()
+        .optional()
+        .messages({
+            "date.base": "Expiration date must be a valid date."
+        }),
+
+    status: Joi.string()
+        .valid("active", "disabled", "finished")
+        .optional()
+        .messages({
+            "string.base": "Status must be a string.",
+            "any.only": "Status must be one of 'active', 'disabled', or 'finished'."
+        }),
+
+    type: Joi.string()
+        .valid("Strike", "Support")
+        .optional()
+        .messages({
+            "string.base": "Type must be a string.",
+            "any.only": "Type must be either 'Strike' or 'Support'."
+        }),
+
+    mission_Link: Joi.string().uri().optional().messages({
+        "string.base": "The 'mission_Link' field must be a valid URI string.",
+    }),
+    actions: Joi.object().optional().messages({
+        "object.base": "The 'actions' field must be a valid JSON object.",
+    }),
+}).or(
+    "title",
+    "description",
+    "platformID",
+    "stars",
+    "expirationDate",
+    "status",
+    "type",
+    "actions",
+    "actions",
+    "mission_Link"
+).messages({
+    "object.missing": "At least one field must be provided for update."
 });
