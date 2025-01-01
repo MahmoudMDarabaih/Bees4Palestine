@@ -11,6 +11,7 @@ const validateRequest = (options: {
     const { bodySchema, paramsSchema, querySchema } = options;
     // Validate request body if bodySchema is provided
     if (bodySchema && req.body) {
+      parseStringToJson(req);
       const { error } = bodySchema.validate(req.body, { abortEarly: false });
       if (error) {
         const errors: string = error.details.map((err) => err.message).join(', ');
@@ -39,3 +40,28 @@ const validateRequest = (options: {
   };
 };
 export default validateRequest;
+
+
+///////
+const parseStringToJson = (req: Request): void => {
+  if (!req.body) return; // Early return if req.body is null or undefined
+
+  // Use a type guard to ensure req.body is not null
+  Object.keys(req.body).forEach(key => {
+    const value = req.body[key];
+
+    // Only attempt to parse string values
+    if (typeof value === 'string') {
+      try {
+        // Attempt to parse the string as JSON
+        const parsedValue = JSON.parse(value);
+        // Update the field with parsed value if successful
+        req.body[key] = parsedValue;
+      } catch (error) {
+        // If parsing fails, keep the original value
+        // This means it wasn't a JSON string
+        // No need to do anything as we keep the original value
+      }
+    }
+  });
+};

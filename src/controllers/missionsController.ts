@@ -1,21 +1,28 @@
 import { NextFunction, Response, Request } from "express-serve-static-core";
 import errorHandler from "../utils/functions/errorHandler";
 import { CreateMissionDto } from "../dtos/MissionDTO";
-import { 
-    createNewMissionService, 
-    getAllMissionsBy_Service, 
-    getAllMissionsService, 
-    getMissionService, 
-    deleteMissionService, 
-    updateMission } from "../services/missionServices"
+import {
+    createNewMissionService,
+    getAllMissionsBy_Service,
+    getAllMissionsService,
+    getMissionService,
+    deleteMissionService,
+    updateMission
+} from "../services/missionServices"
 import APIError from "../utils/types/APIError";
 
 
 
 export const createMission = errorHandler(
     async (req: Request, res: Response, next: NextFunction) => {
+        const image_url = req.file
+            ? `/uploads/missions/${req.file.filename}`
+            : null;
+        if (!image_url) {
+            next(new APIError("no image file found", 401))
+        }
         const { title, description, platformID, stars, expirationDate, status, type, actions, mission_Link } = req.body;
-        let mission = new CreateMissionDto(title, description, platformID, stars, expirationDate, status, type, actions, mission_Link);
+        let mission = new CreateMissionDto(title, description, platformID, stars, expirationDate, status, type, actions, mission_Link, image_url);
         const missionID = await createNewMissionService(mission);
         if (Number.isInteger(missionID)) {
             const mission = await getMissionService(missionID as any);

@@ -5,10 +5,12 @@ import adminMiddleware from '../middlewares/adminMiddleware';
 import { createMission, getAllMissions, getMission, getMissionsByPlatform, getMissionsByType, deleteMissions, updateMissionByID } from '../controllers/missionsController';
 import authMiddleware from '../middlewares/authMiddleware';
 import { ID_Schema } from '../validators/general';
+import { handleMissionImageUpload } from '../middlewares/upload.middleware';
 
 const missionsRouter = Router();
 
 missionsRouter.post('/',
+    handleMissionImageUpload,
     authMiddleware,
     validateRequest({ bodySchema: createMissionSchema }),
     adminMiddleware,

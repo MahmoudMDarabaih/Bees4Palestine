@@ -9,9 +9,9 @@ const createNewMissionService = async (mission: CreateMissionDto): Promise<Query
 
     const [result]: any = await db.query(
         `INSERT INTO missions 
-                (title, description, platform_id, stars, expires_at, status, type, actions,mission_Link) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [title, description, mission.platformID, mission.stars, mission.expirationDate, mission.status, mission.type, actions, mission.mission_Link]
+                (title, description, platform_id, stars, expires_at, status, type, actions, mission_Link, image_url) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [title, description, mission.platformID, mission.stars, mission.expirationDate, mission.status, mission.type, actions, mission.mission_Link, mission.image_url]
     );
     return result.insertId;
 }

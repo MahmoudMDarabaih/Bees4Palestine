@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config(); // Load environment variables
-import express, { Application,Request,Response,NextFunction } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -13,6 +13,9 @@ import errorController from './controllers/errorController';
 
 const app: Application = express();
 
+app.use(express.json()); // Parses incoming requests with JSON payloads
+app.use(express.urlencoded({ extended: true })); // Parses URL-encoded payloads
+
 // Middlewares
 app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse JSON bodies
@@ -21,7 +24,7 @@ app.use(morgan('dev')); // Request logging
 
 // Health check route
 app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'OK' });
+  res.status(200).json({ status: 'OK' });
 });
 
 // Routes

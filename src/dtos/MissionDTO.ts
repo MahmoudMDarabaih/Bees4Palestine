@@ -10,6 +10,7 @@ export class CreateMissionDto {
     type: string;
     actions: Json;
     mission_Link: Json;
+    image_url: string |null;
     constructor(
         title: Json,
         description: Json,
@@ -19,7 +20,8 @@ export class CreateMissionDto {
         status: string,
         type: string,
         actions: Json,
-        mission_Link: Json
+        mission_Link: Json,
+        image_url: string | null
     ) {
         this.title = title;
         this.description = description;
@@ -30,5 +32,6 @@ export class CreateMissionDto {
         this.type = type;
         this.actions = actions;
         this.mission_Link = mission_Link;
+        this.image_url = image_url;
     }
 }
