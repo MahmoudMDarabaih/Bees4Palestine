@@ -26,3 +26,7 @@ build/
 
 # Git file for ignoring dependencies and configurations
 package-lock.json
+
+# ignore the uploaded images in the development 
+src/uploads/*
+!src/uploads/.gitkeep
