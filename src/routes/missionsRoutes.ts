@@ -16,15 +16,31 @@ missionsRouter.post('/',
     adminMiddleware,
     createMission
 );
+missionsRouter.route
 missionsRouter.get('/',
     authMiddleware,
     getAllMissions
 );
-missionsRouter.get('/:id',
-    authMiddleware,
-    validateRequest({ paramsSchema: ID_Schema }),
-    getMission
-);
+missionsRouter.route('/:id')
+    .get(
+        authMiddleware,
+        validateRequest({ paramsSchema: ID_Schema }),
+        getMission
+    )
+    .delete(
+        authMiddleware,
+        adminMiddleware,
+        validateRequest({ paramsSchema: ID_Schema }),
+        deleteMissions
+    )
+    .put(
+        authMiddleware,
+        adminMiddleware,
+        validateRequest({ paramsSchema: ID_Schema }),
+        validateRequest({ bodySchema: updateMissionSchema }),
+        updateMissionByID
+    );
+
 missionsRouter.get('/platform/:id',
     authMiddleware,
     validateRequest({ paramsSchema: ID_Schema }),
@@ -34,19 +50,6 @@ missionsRouter.get('/type/:id',
     authMiddleware,
     validateRequest({ paramsSchema: ID_Schema }),
     getMissionsByType
-);
-missionsRouter.delete('/:id',
-    authMiddleware,
-    adminMiddleware,
-    validateRequest({ paramsSchema: ID_Schema }),
-    deleteMissions
-);
-missionsRouter.put('/:id',
-    authMiddleware,
-    adminMiddleware,
-    validateRequest({ paramsSchema: ID_Schema }),
-    validateRequest({ bodySchema: updateMissionSchema }),
-    updateMissionByID
 );
 
 
