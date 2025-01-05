@@ -142,7 +142,7 @@ const createTables = async () => {
       query: `
         CREATE TABLE IF NOT EXISTS Actions (
           id INTEGER PRIMARY KEY AUTO_INCREMENT,
-          name VARCHAR(255),
+          name JSON,
           platform_id INTEGER,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

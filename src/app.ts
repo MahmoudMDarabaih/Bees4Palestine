@@ -6,7 +6,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
 import missionsRouter from './routes/missionsRoutes';
-import dbMiddleware from './middlewares/dbMiddleware';
+import actionsRouter from './routes/actionsRoutes';
+// import dbMiddleware from './middlewares/dbMiddleware';
 import errorController from './controllers/errorController';
 // import authMiddleware from './middlewares/authMiddleware';
 
@@ -30,6 +31,7 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api/users', authRouter);
 app.use('/api/missions', missionsRouter);
+app.use('/api/actions', actionsRouter);
 
 // Error Handling Middleware (must come after routes)
 // pass errors to the global error controller
