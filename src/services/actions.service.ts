@@ -10,7 +10,7 @@ export const addAction = async (name: JSON, platformID: number) => {
     )
     return result;
 }
-export const getActionService = async (id: number) => {
+export const getActionService = async (id: string) => {
     const [result]: any = await db.query(
         `SELECT *
          FROM actions 
@@ -19,4 +19,23 @@ export const getActionService = async (id: number) => {
         [id]
     );
     return result;
+}
+export const getAllActionsService = async () => {
+    const [result]: any = await db.query(
+        `SELECT *
+         FROM actions 
+        `
+    );
+    return result;
+}
+export const deleteActionService = async (id: string) => {
+    const [result]: any = await db.query(
+        `Delete FROM actions 
+         WHERE id = ?`,
+        [id]
+    );
+    if (result?.affectedRows === 1) {
+        return true;
+    }
+    return null;
 }

@@ -16,7 +16,6 @@ missionsRouter.post('/',
     adminMiddleware,
     createMission
 );
-missionsRouter.route
 missionsRouter.get('/',
     authMiddleware,
     getAllMissions
